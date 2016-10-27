@@ -11,11 +11,8 @@ A Docker container for [Jupyterlab](https://github.com/jupyterlab/jupyterlab) wi
 
 ## Run instructions 
 
-Create container:
+Create container (it returns the contained ID):
 `docker create jupyterlab:latest`
-
-Grab the container ID:
-`docker ps --all | grep jupyterlab`
 
 Start the container using the container ID grabbed from the previous command:
 `docker start <container id>`
@@ -26,5 +23,5 @@ The IP address used by the container can be grabbed with:
 The JupyterLab can now be enjoyed by pointing your browser at:
 `http://<ip address>:8888/lab`
 
-To modify the running container, a shell can be opened with:
+To modify a running container, a shell can be opened with:
 `docker exec -ti <container id> /bin/bash`
