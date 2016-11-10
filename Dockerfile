@@ -37,6 +37,10 @@ RUN apt-get install -y --allow-unauthenticated r-base
 COPY irkernel.R /tmp/
 RUN R CMD BATCH /tmp/irkernel.R
 
+# Install Folium and Plotly
+RUN apt-get -y install pandoc
+RUN pip3 install folium plotly pandas matplotlib
+ 
 # Expose Jupyter port and start Jupyter
 EXPOSE ${JL_PORT}
 COPY startup.sh /tmp/
