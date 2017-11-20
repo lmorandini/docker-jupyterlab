@@ -11,8 +11,11 @@ A Docker container for [Jupyterlab](https://github.com/jupyterlab/jupyterlab) wi
 
 ## Run instructions 
 
-Create container (it returns the contained ID):
-`docker create jupyterlab:latest`
+Create container with a password ot be used for authentiaction (it returns the contained ID):
+`docker create --env JL_PASSWD=<password> jupyterlab:0.2.0`
+
+FIXME: the password setting mechanism does not work, hence JL_PASSWD could be left empty, disabling authentication, as in:
+`docker create --env JL_PASSWD= jupyterlab:0.2.0`
 
 Start the container using the container ID grabbed from the previous command:
 `docker start <container id>`

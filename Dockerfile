@@ -1,7 +1,7 @@
 #
 # JupyterLab installation on Ubuntu, with Python and R kernels
 #
-FROM ubuntu:16.04
+FROM ubuntu:17.04
 
 ENV JL_DATA /var/jupyterlab/data
 ENV JL_PORT 8888
@@ -10,27 +10,27 @@ ENV JL_PORT 8888
 RUN apt-get update 
 RUN  apt-get install -y python python-dev python-pip python-virtualenv && \
   rm -rf /var/lib/apt/lists/*
+RUN pip install --upgrade pip
 
 # Install Python 2 and Jupyter 
 RUN python2 -m pip install ipykernel && \
     python2 -m ipykernel install --user && \
-    ipython kernel install && \
-    pip install --upgrade pip 
-    
+    ipython kernel install
+
 
 # Install Python 3 and Jupyter 3
-RUN apt-get update 
-RUN apt-get install -y python3 python3-pip ipython3-notebook && \ 
-    pip3 install --upgrade pip && \
-    pip3 install -U jupyter && \
-    ipython3 kernelspec install-self
+RUN apt-get update
+RUN apt-get install -y python3 python3-pip
+RUN pip3 install --upgrade pip
+RUN pip3 install -U ipython[all] jupyter && \
+    ipython2 kernelspec install-self
 
 # Install JupyterLab
-RUN pip install jupyterlab && \
+RUN pip3 install jupyterlab && \
     jupyter serverextension enable --py jupyterlab --sys-prefix
 
 # Install R and IRKernel
-RUN echo "deb http://cran.ms.unimelb.edu.au/bin/linux/ubuntu xenial/" | tee -a /etc/apt/sources.list
+RUN echo "deb http://cran.ms.unimelb.edu.au/bin/linux/ubuntu zesty/" | tee -a /etc/apt/sources.list
 RUN apt-get update 
 RUN apt-get install -y libcurl4-openssl-dev libssl-dev
 RUN apt-get install -y --allow-unauthenticated r-base 
@@ -39,8 +39,11 @@ RUN R CMD BATCH /tmp/irkernel.R
 
 # Install Folium and Plotly
 RUN apt-get -y install pandoc
-RUN pip3 install folium plotly pandas matplotlib
- 
+RUN pip3 install folium plotly pandas matplotlib bokeh numpy scipy shapely
+
+# Create the Jupyter configuration file
+RUN jupyter notebook --generate-config
+
 # Expose Jupyter port and start Jupyter
 EXPOSE ${JL_PORT}
 COPY startup.sh /tmp/
