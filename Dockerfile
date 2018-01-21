@@ -1,7 +1,7 @@
 #
 # JupyterLab installation on Ubuntu, with Python and R kernels
 #
-FROM ubuntu:17.04
+FROM ubuntu:17.10
 
 ENV JL_DATA /var/jupyterlab/data
 ENV JL_PORT 8888
@@ -17,7 +17,6 @@ RUN python2 -m pip install ipykernel && \
     python2 -m ipykernel install --user && \
     ipython kernel install
 
-
 # Install Python 3 and Jupyter 3
 RUN apt-get update
 RUN apt-get install -y python3 python3-pip
@@ -30,7 +29,14 @@ RUN pip3 install jupyterlab && \
     jupyter serverextension enable --py jupyterlab --sys-prefix
 
 # Install R and IRKernel
-RUN echo "deb http://cran.ms.unimelb.edu.au/bin/linux/ubuntu zesty/" | tee -a /etc/apt/sources.list
+ENV CRANKEY 51716619E084DAB9
+RUN apt-get install -y dirmngr
+RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys ${CRANKEY}
+
+#RUN gpg –keyserver keyserver.ubuntu.com –recv-key ${CRANKEY} &&\
+#    gpg -a –export ${CRANKEY} | sudo apt-key add –
+#RUN echo "deb http://cran.ms.unimelb.edu.au/bin/linux/ubuntu artful/" |\
+#    tee -a /etc/apt/sources.list
 RUN apt-get update 
 RUN apt-get install -y libcurl4-openssl-dev libssl-dev
 RUN apt-get install -y --allow-unauthenticated r-base 
